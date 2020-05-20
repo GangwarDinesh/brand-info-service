@@ -1,0 +1,5 @@
+runtime: java
+env: flex
+handlers:
+  - url: /brand-info-service.*
+    script: this field is required, but ignored
