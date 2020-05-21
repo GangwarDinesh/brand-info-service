@@ -1,5 +1,5 @@
 runtime: java
 env: flex
 handlers:
-  - url: /brand-info-service.*
+  - url: /.*
     script: this field is required, but ignored
