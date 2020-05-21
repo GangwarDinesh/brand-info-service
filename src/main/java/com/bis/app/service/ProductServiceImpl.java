@@ -19,12 +19,10 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.bis.app.entity.Product;
+import com.bis.app.repository.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -34,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 	private Client client;
 	
 	@Autowired
-	private MongoTemplate mongoTemplate;
+	private ProductRepository productRepository;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -87,8 +85,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Map<String, Integer> prepareIndexing(){
 		
-		List<Product> productList = mongoTemplate.findAll(Product.class);
-		//List<Product> productList = productRepository.findAll();
+		List<Product> productList = productRepository.findAll();
 
 		ObjectMapper mapper = new ObjectMapper();
 		List<IndexRequestBuilder> indexRequestBuilders = new ArrayList<>();
@@ -119,8 +116,7 @@ public class ProductServiceImpl implements ProductService {
 		int successCount = 0;
 		int failedCount = 0;
 		
-		productsList = mongoTemplate.insert(productsList);
-		//productsList = productRepository.insert(productsList);
+		productsList = productRepository.insert(productsList);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		List<IndexRequestBuilder> indexRequestBuilders = new ArrayList<>();
@@ -147,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ShardInfo updateProduct(Product product) {
-		Product updatedProduct = mongoTemplate.save(product);
+		Product updatedProduct = productRepository.save(product);
 		ShardInfo shardInfo = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -166,7 +162,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ShardInfo removeProduct(String id) {
-		mongoTemplate.remove(new Query(Criteria.where("id").is(id)), Product.class);
+		productRepository.deleteById(Long.valueOf(id));
 		ShardInfo shardInfo = null;
 		try {
 			DeleteResponse deleteResponse = client.prepareDelete("products", "product", id).get();
