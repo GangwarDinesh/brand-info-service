@@ -37,14 +37,14 @@ public class ElasticConfiguration {
 		TransportClient client = null;
 		
 		try {
-			Settings settings = Settings.builder()
+			/*Settings settings = Settings.builder()
 					.put("cluster.name", clusterName)
 					.put("client.transport.sniff", sniff)
 					.put("client.transport.ignore_cluster_name", ignoreClusterName)
 					.put("node.name", nodeName)
 					.build();
-			
-			client = new PreBuiltTransportClient(settings);
+			*/
+			client = new PreBuiltTransportClient(Settings.EMPTY);
 			client.addTransportAddress(new TransportAddress(InetAddress.getByName(hostName), portNumber));
 		} catch (Exception e) {
 			e.printStackTrace();
