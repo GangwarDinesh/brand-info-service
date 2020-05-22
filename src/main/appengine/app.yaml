@@ -1,5 +1,11 @@
 runtime: java8
-entrypoint: java -Xmx64m -jar brand-info-service-0.0.1-SNAPSHOT.jar
+env: standard
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
 handlers:
   - url: /.*
     script: this field is required, but ignored
