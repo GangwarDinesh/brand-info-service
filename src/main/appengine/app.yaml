@@ -9,6 +9,3 @@ readiness_check:
   failure_threshold: 2
   success_threshold: 2
   app_start_timeout_sec: 9000
-endpoints_api_service:
-  name: brandinformerservice.el.r.appspot.com
-  rollout_strategy: managed
