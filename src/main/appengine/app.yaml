@@ -1,4 +1,4 @@
-runtime: java8
+runtime: java11
 env: standard
 manual_scaling:
   instances: 1
