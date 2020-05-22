@@ -127,7 +127,6 @@ public class ProductController {
 	@GetMapping(value = "/searchIndexedResult", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> searchIndexedResult(){
 		List<Map<String, Object>> responseList = productService.getProducts(null);
-		responseList = responseList.stream().sorted(Comparator.comparing(o-> String.valueOf(o.get("id")))).collect(Collectors.toList());
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("timestamp", LocalDateTime.now());
 		responseMap.put("response", responseList);

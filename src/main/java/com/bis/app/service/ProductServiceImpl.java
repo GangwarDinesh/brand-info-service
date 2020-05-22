@@ -58,12 +58,14 @@ public class ProductServiceImpl implements ProductService {
 				searchResponse = client.prepareSearch("products")
 						.setTypes("product")
 						.setSearchType(SearchType.QUERY_THEN_FETCH)
-						.setQuery(QueryBuilders.wildcardQuery("brandName", "*"+inputText+"*"))
+						.setQuery(QueryBuilders.wildcardQuery("brandName", "*"+inputText.toLowerCase()+"*"))
+						.setSize(10000)
 						.get();
 			}else {
 				searchResponse = client.prepareSearch("products")
 						.setTypes("product")
-						.setSearchType(SearchType.QUERY_THEN_FETCH)
+						.setQuery(QueryBuilders.matchAllQuery())
+						.setSize(10000)
 						.get();
 				
 			}
