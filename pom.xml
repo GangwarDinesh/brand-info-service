@@ -105,12 +105,12 @@
 		</plugins>
 	</build>
 	
-	<distributionManagement>
+	<!-- <distributionManagement>
 		<repository>
 			<id>internal.repo</id>
 			<name>Internal repo</name>
 			<url>https://github.com/GangwarDinesh/brand-info-service.git</url>
 		</repository>
-	</distributionManagement>
+	</distributionManagement> -->
 
 </project>
