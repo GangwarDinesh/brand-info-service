@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import com.bis.app.util.CommonUtil;
 
 @Service
 public class PojoConversionServiceImpl implements PojoConversionService{
+	
+	private static final Logger logger = LoggerFactory.getLogger(PojoConversionService.class);
 
 	@Value("${pojo.file.base.path}")
 	private String fileBasePath;
@@ -36,9 +40,13 @@ public class PojoConversionServiceImpl implements PojoConversionService{
 		builder.append(uniqueFolder);
 		
 	    File newDir = new File(fileBasePath, uniqueFolder);
-	    newDir.mkdir();
+	    boolean isDirReated = newDir.mkdirs();
+	    logger.debug("[readAllFiles ] - isDirReated : "+isDirReated);
 	    
-	    Path path = Files.write(Paths.get(builder.toString()+"/input.json"), input.getBytes());
+	    Path dir = Paths.get(builder.toString()+"/input.json");
+	    logger.debug("[readAllFiles ] - dir : "+dir);
+	    
+	    Path path = Files.write(dir, input.getBytes());
 	    URL inputURI = path.toFile().toURI().toURL();
 	    String packageName = "com.pojo";  
         File outputPojoDirectory = new File(builder.toString());  
