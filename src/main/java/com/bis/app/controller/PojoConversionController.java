@@ -10,6 +10,8 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,11 +27,16 @@ import com.bis.app.service.PojoConversionService;
 @CrossOrigin(value = "*")
 public class PojoConversionController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(PojoConversionController.class);
+	
 	@Autowired
 	private PojoConversionService pojoConversionService;
 
 	@PostMapping(value = "/generate", produces = MediaType.APPLICATION_PDF_VALUE)
 	public void generatePojo(HttpServletResponse response, @RequestBody String requestJSON) throws IOException {
+		
+		logger.debug("Request data : {} ", requestJSON);
+		
 		String uniqueFolder = String.valueOf(System.currentTimeMillis());
 		response.setStatus(HttpServletResponse.SC_OK);
 	    response.addHeader("Content-Disposition", "attachment; filename=\"JsonPojo.zip\"");
@@ -49,6 +56,6 @@ public class PojoConversionController {
 	    zipOutputStream.close();
 	    
 	    pojoConversionService.removeDirectory(uniqueFolder);
-	    
+	    logger.debug("******Process executed successfully.******** ");
 	}
 }

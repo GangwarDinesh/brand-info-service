@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.elasticsearch.action.support.replication.ReplicationResponse.ShardInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,11 +33,15 @@ import com.bis.app.service.ProductService;
 @CrossOrigin(value = "*")
 public class ProductController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+	
 	@Autowired
 	private ProductService productService;
 	
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> search(@RequestParam("inputText") String inputText){
+		
+		logger.debug("[Search method ]"+inputText);
 		
 		List<Map<String, Object>> responseList = productService.getProducts(inputText);
 		responseList = responseList.stream().sorted(Comparator.comparing(o-> String.valueOf(o.get("id")))).collect(Collectors.toList());
@@ -52,6 +58,7 @@ public class ProductController {
 	}
 	@GetMapping(value = "/createAllIndexing", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> prepareIndexing(){	
+		logger.debug("[createAllIndexing method ]");
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("timestamp", LocalDateTime.now());
 		
@@ -70,6 +77,8 @@ public class ProductController {
 	
 	@PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> addProduct(@RequestBody List<Product> productsList){
+		
+		logger.debug("[add method ]");
 		
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("timestamp", LocalDateTime.now());
@@ -90,6 +99,9 @@ public class ProductController {
 	
 	@PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateProduct(@RequestBody Product product){
+		
+		logger.debug("[update method ]");
+		
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("timestamp", LocalDateTime.now());
 		
@@ -108,6 +120,9 @@ public class ProductController {
 	
 	@DeleteMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> removeProduct(@RequestParam("id") String id){
+		
+		logger.debug("[remove method ]");
+		
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("timestamp", LocalDateTime.now());
 		
@@ -126,6 +141,9 @@ public class ProductController {
 	
 	@GetMapping(value = "/searchIndexedResult", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> searchIndexedResult(){
+		
+		logger.debug("[searchIndexedResult method ]");
+		
 		List<Map<String, Object>> responseList = productService.getProducts(null);
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("timestamp", LocalDateTime.now());
