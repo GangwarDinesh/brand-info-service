@@ -50,22 +50,29 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public List<Map<String, Object>> getProducts(String inputText){
+	public List<Map<String, Object>> getProducts(Map<String, String> requestMap){
 		List<Map<String, Object>> response = new ArrayList<>();
 		SearchResponse searchResponse = null;
+		
 		try {
+			int pageSize = Integer.valueOf(requestMap.get("PAGE_SIZE"));
+			int pageNo = Integer.valueOf(requestMap.get("PAGE_NO"));
+			String inputText = String.valueOf(requestMap.get("INPUT_TEXT"));
+			int fromIndex = pageSize * pageNo + 1;
+			
 			if(null != inputText && !inputText.isEmpty()) {
 				searchResponse = client.prepareSearch("products")
 						.setTypes("product")
 						.setSearchType(SearchType.QUERY_THEN_FETCH)
 						.setQuery(QueryBuilders.wildcardQuery("brandName", "*"+inputText.toLowerCase()+"*"))
-						.setSize(10000)
-						.get();
+						.setSize(pageSize)
+						.get();	
 			}else {
 				searchResponse = client.prepareSearch("products")
 						.setTypes("product")
 						.setQuery(QueryBuilders.matchAllQuery())
-						.setSize(10000)
+						.setFrom(fromIndex)
+						.setSize(pageSize)
 						.get();
 				
 			}

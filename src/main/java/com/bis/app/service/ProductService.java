@@ -12,7 +12,7 @@ public interface ProductService {
 
 	IndexResponse createElasticIndex(Product product);
 	
-	List<Map<String, Object>> getProducts(String inputText);
+	List<Map<String, Object>> getProducts(Map<String, String> requestMap);
 	
 	Map<String, Integer> prepareIndexing();
 	

@@ -38,12 +38,12 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
-	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> search(@RequestParam("inputText") String inputText){
+	@PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> search(@RequestBody Map<String, String> requestMap){
 		
-		logger.debug("[Search method ]"+inputText);
+		logger.debug("[Search method ] - requestMap : "+requestMap);
 		
-		List<Map<String, Object>> responseList = productService.getProducts(inputText);
+		List<Map<String, Object>> responseList = productService.getProducts(requestMap);
 		responseList = responseList.stream().sorted(Comparator.comparing(o-> String.valueOf(o.get("id")))).collect(Collectors.toList());
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("timestamp", LocalDateTime.now());
